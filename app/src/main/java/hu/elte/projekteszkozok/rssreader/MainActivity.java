@@ -1,41 +1,37 @@
 package hu.elte.projekteszkozok.rssreader;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String URL = "https://hvg.hu/rss";
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private static RecyclerView mRecyclerView;
+    private static RecyclerView.Adapter<RssFeedAdapter.ViewHolder> mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = findViewById(R.id.my_recycler_view);
-        recyclerView.setHasFixedSize(true);
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        final List<String> input = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            input.add("Test" + i);
-        }
-        mAdapter = new RecyclerViewAdapter(input);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView = findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        new GetFeedAsync().execute();
 
         //remove element by swiping
         /*ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
-                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder
+                    public boolean onMove(RecyclerView mRecyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder
                             target) {
                         return false;
                     }
@@ -46,7 +42,23 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
         */
     }
+
+    private static class GetFeedAsync extends AsyncTask<Void, Void, List<ArticleDataModel>> {
+        @Override
+        protected List<ArticleDataModel> doInBackground(Void... voids) {
+            List<ArticleDataModel> data;
+            data = RssFeedProvider.parse(URL);
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(List<ArticleDataModel> result) {
+            mAdapter = new RssFeedAdapter(result);
+            mRecyclerView.setAdapter(mAdapter);
+        }
+    }
+
 }

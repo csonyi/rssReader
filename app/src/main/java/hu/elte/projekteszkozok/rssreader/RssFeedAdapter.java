@@ -8,11 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private List<String> values;
+public class RssFeedAdapter extends RecyclerView.Adapter<RssFeedAdapter.ViewHolder> {
+    private List<ArticleDataModel> mValues;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
@@ -29,22 +28,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public void add(int position, String item) {
-        values.add(position, item);
+    public void add(int position, ArticleDataModel item) {
+        mValues.add(position, item);
         notifyItemInserted(position);
     }
 
     public void remove(int position) {
-        values.remove(position);
+        mValues.remove(position);
         notifyItemRemoved(position);
     }
 
-    public RecyclerViewAdapter(List<String> myDataset) {
-        values = myDataset;
+    public RssFeedAdapter(List<ArticleDataModel> dataset) {
+        mValues = dataset;
     }
 
     @Override
-    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RssFeedAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(
                 parent.getContext());
         View v =
@@ -54,20 +53,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final String name = values.get(position);
-        holder.title.setText("Title: " + name);
-        holder.title.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                remove(position);
-            }
-        });
-
-        holder.desc.setText("Desc: " + name);
+        final ArticleDataModel data = mValues.get(position);
+        holder.title.setText(data.getTitle());
+        holder.desc.setText(data.getDesc());
+        holder.pubDate.setText(data.getPubDate());
     }
 
     @Override
     public int getItemCount() {
-        return values.size();
+        return mValues.size();
     }
 }
