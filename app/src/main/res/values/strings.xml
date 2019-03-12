@@ -3,4 +3,5 @@
 
     <string name="recycler_view_title">Title</string>
     <string name="recycler_view_description">Description</string>
+    <string name="recycler_pub_date">Publication date</string>
 </resources>

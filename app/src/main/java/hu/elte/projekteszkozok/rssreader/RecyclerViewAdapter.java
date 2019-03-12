@@ -1,6 +1,5 @@
 package hu.elte.projekteszkozok.rssreader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.support.annotation.NonNull;
@@ -9,21 +8,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private List<String> values;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtHeader;
-        public TextView txtFooter;
+        public TextView title;
+        public TextView desc;
+        public TextView pubDate;
         public View layout;
 
         public ViewHolder(View v) {
             super(v);
             layout = v;
-            txtHeader =  v.findViewById(R.id.title);
-            txtFooter =  v.findViewById(R.id.desc);
+            title =  v.findViewById(R.id.title);
+            desc =  v.findViewById(R.id.desc);
+            pubDate = v.findViewById(R.id.pubDate);
         }
     }
 
@@ -47,22 +49,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 parent.getContext());
         View v =
                 inflater.inflate(R.layout.row_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final String name = values.get(position);
-        holder.txtHeader.setText("Title: " + name);
-        holder.txtHeader.setOnClickListener(new OnClickListener() {
+        holder.title.setText("Title: " + name);
+        holder.title.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 remove(position);
             }
         });
 
-        holder.txtFooter.setText("Desc: " + name);
+        holder.desc.setText("Desc: " + name);
     }
 
     @Override
