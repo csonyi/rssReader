@@ -29,7 +29,7 @@ public interface RssDao {
     void deleteSite(Site site);
 
     @Query("SELECT * FROM sites")
-    void getAllSite();
+    List<Site> getAllSite();
 
     //Article queries
 
@@ -43,7 +43,7 @@ public interface RssDao {
     void deleteArticle(Article article);
 
     @Query("SELECT * from articles where siteId = :siteId")
-    List<Article> getArticleBySite(int siteId);
+    List<Article> getArticlesBySite(int siteId);
 
     @Query("SELECT * from articles")
     List<Article> getSllArticle();
