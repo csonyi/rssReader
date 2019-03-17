@@ -9,10 +9,23 @@ import android.support.annotation.NonNull;
 
 @Entity(tableName = "sites")
 public class Site {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
     @ColumnInfo(name = "url")
     @NonNull
     public String url;
+
+    public Site(@NonNull String url) {
+        this.url = url;
+    }
+
+    @NonNull
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(@NonNull String url) {
+        this.url = url;
+    }
 }
