@@ -1,5 +1,6 @@
-package hu.elte.projekteszkozok.rssreader.database;
+package hu.elte.projekteszkozok.rssreader.persistence.db.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -9,8 +10,8 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import hu.elte.projekteszkozok.rssreader.database.entity.Article;
-import hu.elte.projekteszkozok.rssreader.database.entity.Site;
+import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Article;
+import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Site;
 
 //Created by Zsolt Bakos on 2019.03.12
 
@@ -29,7 +30,7 @@ public interface RssDao {
     void deleteSite(Site site);
 
     @Query("SELECT * FROM sites")
-    List<Site> getAllSite();
+    LiveData<List<Site>> getAllSite();
 
     //Article queries
 
@@ -42,10 +43,13 @@ public interface RssDao {
     @Delete
     void deleteArticle(Article article);
 
-    @Query("SELECT * from articles where siteId = :siteId")
-    List<Article> getArticlesBySite(int siteId);
+    @Query("DELETE FROM articles WHERE siteId =:siteId")
+    void deleteArticlesBySite(int siteId);
 
-    @Query("SELECT * from articles")
-    List<Article> getSllArticle();
+    @Query("SELECT * from articles WHERE siteId = :siteId")
+    LiveData<List<Article>> getArticlesBySite(int siteId);
+
+    @Query("SELECT * FROM articles")
+    LiveData<List<Article>> getAllArticle();
 
 }

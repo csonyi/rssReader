@@ -1,4 +1,4 @@
-package hu.elte.projekteszkozok.rssreader.database.tools;
+package hu.elte.projekteszkozok.rssreader.persistence.db.tools;
 
 import android.arch.persistence.room.TypeConverter;
 

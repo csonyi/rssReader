@@ -1,4 +1,4 @@
-package hu.elte.projekteszkozok.rssreader.database;
+package hu.elte.projekteszkozok.rssreader.persistence.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -6,9 +6,10 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import hu.elte.projekteszkozok.rssreader.database.entity.Article;
-import hu.elte.projekteszkozok.rssreader.database.entity.Site;
-import hu.elte.projekteszkozok.rssreader.database.tools.Converters;
+import hu.elte.projekteszkozok.rssreader.persistence.db.dao.RssDao;
+import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Article;
+import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Site;
+import hu.elte.projekteszkozok.rssreader.persistence.db.tools.Converters;
 
 //Created by Zsolt Bakos on 2019.03.13
 
@@ -19,7 +20,7 @@ public abstract class RssDatabase extends RoomDatabase {
 
     private static volatile RssDatabase INSTANCE;
 
-    static RssDatabase getDatabase(final Context context) {
+    public static RssDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (RssDatabase.class) {
                 if (INSTANCE == null) {

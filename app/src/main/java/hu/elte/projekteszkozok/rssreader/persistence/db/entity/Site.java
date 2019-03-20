@@ -1,4 +1,4 @@
-package hu.elte.projekteszkozok.rssreader.database.entity;
+package hu.elte.projekteszkozok.rssreader.persistence.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -28,4 +28,6 @@ public class Site {
     public void setUrl(@NonNull String url) {
         this.url = url;
     }
+
+
 }
