@@ -29,5 +29,11 @@ public class Site {
         this.url = url;
     }
 
-
+    @Override
+    public String toString() {
+        return "Site{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }

@@ -1,10 +1,11 @@
 package hu.elte.projekteszkozok.rssreader.persistence;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import hu.elte.projekteszkozok.rssreader.persistence.db.RssDatabase;
 import hu.elte.projekteszkozok.rssreader.persistence.db.dao.RssDao;
@@ -16,155 +17,308 @@ import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Site;
 public class RssRepository {
 
     private RssDao rssDao;
-    private LiveData<List<Site>> allSite;
-    private LiveData<List<Article>> allArticle;
 
-    RssRepository(Application application) {
+    public RssRepository(Application application) {
         RssDatabase db = RssDatabase.getDatabase(application);
         rssDao = db.rssDao();
-        allSite = rssDao.getAllSite();
     }
 
-    //Async Database tasks
+    public List<Site> getAllSite() {
+        List<Site> sites = new ArrayList<>();
+        try {
+            sites = new getAllSiteTask(rssDao).execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return sites;
+    }
 
-    private static class insertSite extends AsyncTask<Site, Void, Void> {
-        private RssDao asyncRssDao;
+    public Site getSiteByUrl(String url) {
+        Site site = null;
+        try {
+            site = new getSiteByURLTask(rssDao).execute(url).get().get(0);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return site;
+    }
 
-        insertSite(RssDao dao) {
-            asyncRssDao = dao;
+    public List<Article> getAllArticleBySiteURL(String url) {
+        List<Article> articles = new ArrayList<>();
+        try {
+            articles = new getAllArticleBySiteURLTask(rssDao).execute(url).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return articles;
+    }
+
+    public List<Article> getAllArticle() {
+        List<Article> articles = new ArrayList<>();
+        try {
+            articles = new getAllArticleTask(rssDao).execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return articles;
+    }
+
+    public List<Article> getAllArticleBySite(Site site) {
+        List<Article> articles = new ArrayList<>();
+        try {
+            articles = new getAllArticleBySiteIdTask(rssDao).execute(site.id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return articles;
+    }
+
+    public void insertSite(Site site) {
+        new insertSiteTask(rssDao).execute(site);
+    }
+
+    public void updateSite(Site site) {
+        new updateSiteTask(rssDao).execute(site);
+    }
+
+    public void deleteSite(Site site) {
+        new deleteSiteTask(rssDao).execute(site);
+    }
+
+    public void deleteAllSite() {
+        new deleteAllSiteTask(rssDao).execute();
+    }
+
+    public void insertArticle(Article article) {
+        new insertArticleTask(rssDao).execute(article);
+    }
+
+    public void updateArticle(Article article) {
+        new updateArticleTask(rssDao).execute(article);
+    }
+
+    public void deleteArticle(Article article) {
+        new deleteArticleTask(rssDao).execute(article);
+    }
+
+    public void deleteAllArticle() {
+        new deleteAllArticleTask(rssDao).execute();
+    }
+
+
+
+    //Async Database tasks - use it only by methods within this repo class!
+
+    private static class insertSiteTask extends AsyncTask<Site, Void, Void> {
+        private RssDao rssDao;
+
+        insertSiteTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Site... params) {
             synchronized (this) {
-                asyncRssDao.insertSite(params[0]);
+                rssDao.insertSite(params[0]);
             }
             return null;
         }
     }
 
-    private static class insertArticle extends AsyncTask<Article, Void, Void> {
-        private RssDao asyncRssDao;
+    private static class insertArticleTask extends AsyncTask<Article, Void, Void> {
+        private RssDao rssDao;
 
-        insertArticle(RssDao dao) {
-            asyncRssDao = dao;
+        insertArticleTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Article... params) {
             synchronized (this) {
-                asyncRssDao.insertArticle(params[0]);
+                rssDao.insertArticle(params[0]);
             }
             return null;
         }
     }
 
-    private static class updateSite extends AsyncTask<Site, Void, Void> {
-        private RssDao asyncRssDao;
+    private static class updateSiteTask extends AsyncTask<Site, Void, Void> {
+        private RssDao rssDao;
 
-        updateSite(RssDao dao) {
-            asyncRssDao = dao;
+        updateSiteTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Site... params) {
             synchronized (this) {
-                asyncRssDao.updateSite(params[0]);
+                rssDao.updateSite(params[0]);
             }
             return null;
         }
     }
 
-    private static class updateArticle extends AsyncTask<Article, Void, Void> {
-        private RssDao asyncRssDao;
+    private static class updateArticleTask extends AsyncTask<Article, Void, Void> {
+        private RssDao rssDao;
 
-        updateArticle(RssDao dao) {
-            asyncRssDao = dao;
+        updateArticleTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Article... params) {
             synchronized (this) {
-                asyncRssDao.updateArticle(params[0]);
+                rssDao.updateArticle(params[0]);
             }
             return null;
         }
     }
 
-    private static class deleteSite extends AsyncTask<Site, Void, Void> {
-        private RssDao asyncRssDao;
+    private static class deleteSiteTask extends AsyncTask<Site, Void, Void> {
+        private RssDao rssDao;
 
-        deleteSite(RssDao dao) {
-            asyncRssDao = dao;
+        deleteSiteTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Site... params) {
             synchronized (this) {
-                asyncRssDao.deleteSite(params[0]);
-                asyncRssDao.deleteArticlesBySite(params [0].id);
+                rssDao.deleteSite(params[0]);
+                rssDao.deleteArticlesBySite(params [0].id);
             }
             return null;
         }
     }
 
-    private static class deleteArticle extends AsyncTask<Article, Void, Void> {
-        private RssDao asyncRssDao;
+    private static class deleteAllSiteTask extends AsyncTask<Void, Void, Void> {
+        private RssDao rssDao;
 
-        deleteArticle(RssDao dao) {
-            asyncRssDao = dao;
+        deleteAllSiteTask(RssDao dao) {
+            rssDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            synchronized (this) {
+                rssDao.deleteAllArticle();
+                rssDao.deleteAllSite();
+            }
+            return null;
+        }
+    }
+
+    private static class deleteArticleTask extends AsyncTask<Article, Void, Void> {
+        private RssDao rssDao;
+
+        deleteArticleTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Article... params) {
             synchronized (this) {
-                asyncRssDao.deleteArticle(params[0]);
+                rssDao.deleteArticle(params[0]);
+            }
+            return null;
+        }
+    }
+    private static class deleteAllArticleTask extends AsyncTask<Void, Void, Void> {
+        private RssDao rssDao;
+
+        deleteAllArticleTask(RssDao dao) {
+            rssDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            synchronized (this) {
+                rssDao.deleteAllArticle();
             }
             return null;
         }
     }
 
-    private static class getSites extends AsyncTask<Void, Void, LiveData<List<Site>>> {
-        private RssDao asyncRssDao;
+    private static class getAllSiteTask extends AsyncTask<Void, Void, List<Site>> {
+        private RssDao rssDao;
 
-        getSites(RssDao dao) {
-            asyncRssDao = dao;
+        getAllSiteTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
-        protected LiveData<List<Site>> doInBackground(final Void... params) {
+        protected List<Site> doInBackground(final Void... params) {
             synchronized (this) {
-                return asyncRssDao.getAllSite();
+                return rssDao.getAllSite();
             }
         }
     }
 
-    private static class getArticles extends AsyncTask<Void, Void, LiveData<List<Article>>> {
-        private RssDao asyncRssDao;
+    private static class getSiteByURLTask extends AsyncTask<String, Void, List<Site>> {
+        private RssDao rssDao;
 
-        getArticles(RssDao dao) {
-            asyncRssDao = dao;
+        getSiteByURLTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
-        protected LiveData<List<Article>> doInBackground(final Void... params) {
+        protected List<Site> doInBackground(final String... params) {
             synchronized (this) {
-                return asyncRssDao.getAllArticle();
+                return rssDao.getSiteByURL(params[0]);
             }
         }
     }
 
-    private static class getArticlesBySite extends AsyncTask<Site, Void, LiveData<List<Article>>> {
-        private RssDao asyncRssDao;
+    private static class getAllArticleTask extends AsyncTask<Void, Void, List<Article>> {
+        private RssDao rssDao;
 
-        getArticlesBySite(RssDao dao) {
-            asyncRssDao = dao;
+        getAllArticleTask(RssDao dao) {
+            rssDao = dao;
         }
 
         @Override
-        protected LiveData<List<Article>> doInBackground(final Site... params) {
+        protected List<Article> doInBackground(final Void... params) {
             synchronized (this) {
-                return asyncRssDao.getArticlesBySite(params[0].id);
+                return rssDao.getAllArticle();
+            }
+        }
+    }
+
+    private static class getAllArticleBySiteURLTask extends AsyncTask<String, Void, List<Article>> {
+        private RssDao rssDao;
+
+        getAllArticleBySiteURLTask(RssDao dao) {
+            rssDao = dao;
+        }
+
+        @Override
+        protected List<Article> doInBackground(final String... params) {
+            synchronized (this) {
+                return rssDao.getAllArticleBySiteURL(params[0]);
+            }
+        }
+    }
+
+    private static class getAllArticleBySiteIdTask extends AsyncTask<Integer, Void, List<Article>> {
+        private RssDao rssDao;
+
+        getAllArticleBySiteIdTask(RssDao dao) {
+            rssDao = dao;
+        }
+
+        @Override
+        protected List<Article> doInBackground(final Integer... params) {
+            synchronized (this) {
+                return rssDao.getAllArticleBySiteId(params[0]);
             }
         }
     }

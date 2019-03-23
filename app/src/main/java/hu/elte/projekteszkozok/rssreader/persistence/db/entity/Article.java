@@ -58,4 +58,15 @@ public class Article {
     public int getSiteId() {
         return siteId;
     }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", desc='" + desc + '\'' +
+                ", pubDate=" + pubDate +
+                ", siteId=" + siteId +
+                '}';
+    }
 }
