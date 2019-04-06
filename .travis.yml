@@ -12,7 +12,9 @@ android:
   # System image for emulator
   - sys-img-x86-android-28
   licenses:
-    - 'android-sdk-license-.+'
+  - 'android-sdk-preview-license-52d11cd2'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
 
 # Cache wipe for Gradle
 before_cache:
