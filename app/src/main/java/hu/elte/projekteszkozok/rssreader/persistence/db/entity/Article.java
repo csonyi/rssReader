@@ -18,19 +18,19 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
             onDelete = CASCADE))
 public class Article {
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
     @ColumnInfo(name = "title")
-    public String title;
+    private String title;
 
     @ColumnInfo(name = "desc")
-    public String desc;
+    private String desc;
 
     @ColumnInfo(name = "pubDate")
-    public Date pubDate;
+    private Date pubDate;
 
     @ColumnInfo(name = "siteId")
-    public int siteId;
+    private int siteId;
 
     public Article(String title, String desc, Date pubDate, int siteId) {
         this.title = title;
@@ -57,6 +57,26 @@ public class Article {
 
     public int getSiteId() {
         return siteId;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setPubDate(Date pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public void setSiteId(int siteId) {
+        this.siteId = siteId;
     }
 
     @Override

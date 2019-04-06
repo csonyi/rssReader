@@ -10,11 +10,11 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "sites")
 public class Site {
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
     @ColumnInfo(name = "url")
     @NonNull
-    public String url;
+    private String url;
 
     public Site(@NonNull String url) {
         this.url = url;
@@ -35,5 +35,13 @@ public class Site {
                 "id=" + id +
                 ", url='" + url + '\'' +
                 '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -74,7 +74,7 @@ public class RssRepository {
     public List<Article> getAllArticleBySite(Site site) {
         List<Article> articles = new ArrayList<>();
         try {
-            articles = new getAllArticleBySiteIdTask(rssDao).execute(site.id).get();
+            articles = new getAllArticleBySiteIdTask(rssDao).execute(site.getId()).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -194,7 +194,7 @@ public class RssRepository {
         protected Void doInBackground(final Site... params) {
             synchronized (this) {
                 rssDao.deleteSite(params[0]);
-                rssDao.deleteArticlesBySite(params [0].id);
+                rssDao.deleteArticlesBySite(params [0].getId());
             }
             return null;
         }
