@@ -3,6 +3,16 @@ package hu.elte.projekteszkozok.rssreader;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import android.util.Log;
+
+import java.util.Date;
+import java.util.List;
+
+import hu.elte.projekteszkozok.rssreader.persistence.RssRepository;
+import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Article;
+import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Site;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -45,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
         */
     }
-
+    
     private static class GetFeedAsync extends AsyncTask<Void, Void, List<ArticleDataModel>> {
         @Override
         protected List<ArticleDataModel> doInBackground(Void... voids) {
