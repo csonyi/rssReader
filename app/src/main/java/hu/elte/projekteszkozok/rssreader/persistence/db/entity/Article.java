@@ -89,4 +89,12 @@ public class Article {
                 ", siteId=" + siteId +
                 '}';
     }
+
+    public String toStringWithoudIds() {
+        return "Article{" +
+                "title='" + title + '\'' +
+                ", desc='" + desc + '\'' +
+                ", pubDate=" + pubDate +
+                '}';
+    }
 }
