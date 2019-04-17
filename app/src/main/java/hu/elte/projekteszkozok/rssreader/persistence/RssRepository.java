@@ -87,6 +87,11 @@ public class RssRepository {
         new insertSiteTask(rssDao).execute(site);
     }
 
+    public void insertMultipleSite(List<Site> sites) {
+        for (Site site: sites) {
+            new insertSiteTask(rssDao).execute(site);
+        }
+    }
     public void updateSite(Site site) {
         new updateSiteTask(rssDao).execute(site);
     }
@@ -101,6 +106,12 @@ public class RssRepository {
 
     public void insertArticle(Article article) {
         new insertArticleTask(rssDao).execute(article);
+    }
+
+    public void insertMultipleArticle(List<Article> articles) {
+        for (Article article: articles) {
+            new insertArticleTask(rssDao).execute(article);
+        }
     }
 
     public void updateArticle(Article article) {
