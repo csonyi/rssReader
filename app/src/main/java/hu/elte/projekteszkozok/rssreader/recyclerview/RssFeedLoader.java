@@ -12,6 +12,7 @@ import java.util.List;
 
 import hu.elte.projekteszkozok.rssreader.R;
 import hu.elte.projekteszkozok.rssreader.persistence.RssRepository;
+import hu.elte.projekteszkozok.rssreader.persistence.db.dao.RssDao;
 import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Article;
 import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Site;
 
@@ -19,33 +20,32 @@ public class RssFeedLoader extends AsyncTask<Void,Void,List<Article>> {
     private String mUrl;
     private Application mApplication;
     private List<Article> mArticleList;
-    private RssRepository mRepository;
+//    private RssRepository mRepository;
     private RssFeedAdapter mAdapter;
-
-    public RssFeedLoader(Application application, String url, RssFeedAdapter adapter) {
+    private RssDao mDao;
+    
+    public RssFeedLoader(Application application, String url, RssFeedAdapter adapter, RssDao dao) {
         mApplication = application;
         mUrl = url;
-        mRepository = new RssRepository(mApplication);
         mAdapter = adapter;
+        mDao = dao;
+//        mRepository = rssRepository;
     }
 
     @Override
     protected List<Article> doInBackground(Void... voids) {
         if(isConnectedToInternet(mApplication)) {
-            Site mSite;
-            if (mRepository.getSiteByUrl(mUrl) != null) {
-                mRepository.insertSite(new Site(mUrl));
+            if (mDao.getSiteByURL(mUrl) == null) {
+               mDao.insertSite(new Site(mUrl));
             }
-
-            Log.d("LOGGOLJÁÁÁ MÁÁ", "PLSSSS");
-            mSite = mRepository.getSiteByUrl(mUrl);
+            Site mSite = mDao.getSiteByURL(mUrl);
             mArticleList = RssFeedProvider.parse(mUrl, mSite.getId());
-            mRepository.deleteAllArticle();
-            mRepository.insertMultipleArticle(mArticleList);
+            mDao.deleteAllArticle();
+            mDao.insertMultipleArticle(mArticleList);
         } else {
             Log.d("RssReader", "No internet connection available.");
-            if(mRepository.getAllArticle().size() != 0) {
-                mArticleList = mRepository.getAllArticle();
+            if(mDao.getAllArticle().size() != 0) {
+                mArticleList = mDao.getAllArticle();
                 Toast.makeText(mApplication, R.string.no_internet_read_database, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(mApplication, R.string.no_intenet_no_database, Toast.LENGTH_LONG).show();

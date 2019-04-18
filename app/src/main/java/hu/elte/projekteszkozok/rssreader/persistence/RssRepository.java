@@ -18,6 +18,10 @@ public class RssRepository {
 
     private RssDao rssDao;
 
+    public RssDao getRssDao() {
+        return rssDao;
+    }
+
     public RssRepository(Application application) {
         RssDatabase db = RssDatabase.getDatabase(application);
         rssDao = db.rssDao();
@@ -38,7 +42,7 @@ public class RssRepository {
     public Site getSiteByUrl(String url) {
         Site site = null;
         try {
-            site = new getSiteByURLTask(rssDao).execute(url).get().get(0);
+            site = new getSiteByURLTask(rssDao).execute(url).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -302,7 +306,7 @@ public class RssRepository {
         }
     }
 
-    private static class getSiteByURLTask extends AsyncTask<String, Void, List<Site>> {
+    private static class getSiteByURLTask extends AsyncTask<String, Void, Site> {
         private RssDao rssDao;
 
         getSiteByURLTask(RssDao dao) {
@@ -310,7 +314,7 @@ public class RssRepository {
         }
 
         @Override
-        protected List<Site> doInBackground(final String... params) {
+        protected Site doInBackground(final String... params) {
             synchronized (this) {
                 return rssDao.getSiteByURL(params[0]);
             }

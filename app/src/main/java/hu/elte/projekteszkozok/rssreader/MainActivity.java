@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import hu.elte.projekteszkozok.rssreader.persistence.RssRepository;
+import hu.elte.projekteszkozok.rssreader.persistence.db.RssDatabase;
 import hu.elte.projekteszkozok.rssreader.recyclerview.RssFeedAdapter;
 import hu.elte.projekteszkozok.rssreader.recyclerview.RssFeedLoader;
 
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new RssFeedAdapter(getApplicationContext());
-        new RssFeedLoader(getApplication(), URL, mAdapter).execute();
+        new RssFeedLoader(getApplication(), URL, mAdapter, RssDatabase.getDatabase(getBaseContext()).rssDao()).execute();
         mRecyclerView.setAdapter(mAdapter);
     }
 

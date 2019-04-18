@@ -38,7 +38,7 @@ public interface RssDao {
     List<Site> getAllSite();
 
     @Query("SELECT * FROM sites WHERE url=:url")
-    List<Site> getSiteByURL(String url);
+    Site getSiteByURL(String url);
 
     //Article queries
 
