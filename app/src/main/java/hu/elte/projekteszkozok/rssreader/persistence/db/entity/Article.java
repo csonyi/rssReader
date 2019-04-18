@@ -27,17 +27,23 @@ public class Article {
     private String desc;
 
     @ColumnInfo(name = "pubDate")
-    private Date pubDate;
+    private String pubDate;
+
+    @ColumnInfo(name = "link")
+    private String link;
 
     @ColumnInfo(name = "siteId")
     private int siteId;
 
-    public Article(String title, String desc, Date pubDate, int siteId) {
+    public Article(String title, String desc, String pubDate, int siteId, String link) {
         this.title = title;
         this.desc = desc;
         this.pubDate = pubDate;
         this.siteId = siteId;
+        this.link = link;
     }
+
+    public Article(){}
 
     public int getId() {
         return id;
@@ -51,7 +57,7 @@ public class Article {
         return desc;
     }
 
-    public Date getPubDate() {
+    public String getPubDate() {
         return pubDate;
     }
 
@@ -71,12 +77,20 @@ public class Article {
         this.desc = desc;
     }
 
-    public void setPubDate(Date pubDate) {
+    public void setPubDate(String pubDate) {
         this.pubDate = pubDate;
     }
 
     public void setSiteId(int siteId) {
         this.siteId = siteId;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     @Override

@@ -4,4 +4,6 @@
     <string name="recycler_view_title">Title</string>
     <string name="recycler_view_description">Description</string>
     <string name="recycler_pub_date">Publication date</string>
+    <string name="no_internet_read_database">No internet connection available. Reading data from database.</string>
+    <string name="no_intenet_no_database">No internet connection and database entry available.</string>
 </resources>

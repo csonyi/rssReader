@@ -13,7 +13,7 @@ import hu.elte.projekteszkozok.rssreader.persistence.db.tools.Converters;
 
 //Created by Zsolt Bakos on 2019.03.13
 
-@Database(entities = {Site.class, Article.class}, version = 1)
+@Database(entities = {Site.class, Article.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class RssDatabase extends RoomDatabase {
     public abstract RssDao rssDao();
@@ -27,7 +27,8 @@ public abstract class RssDatabase extends RoomDatabase {
                     //Create the database
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RssDatabase.class, "rss_database")
-                    .build();
+                            .fallbackToDestructiveMigration()
+                            .build();
                 }
             }
         }
