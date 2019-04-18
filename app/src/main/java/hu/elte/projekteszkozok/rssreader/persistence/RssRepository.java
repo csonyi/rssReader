@@ -88,9 +88,7 @@ public class RssRepository {
     }
 
     public void insertMultipleSite(List<Site> sites) {
-        for (Site site: sites) {
-            new insertSiteTask(rssDao).execute(site);
-        }
+        new insertMultipleSiteTask(rssDao).execute(sites);
     }
     public void updateSite(Site site) {
         new updateSiteTask(rssDao).execute(site);
@@ -109,9 +107,7 @@ public class RssRepository {
     }
 
     public void insertMultipleArticle(List<Article> articles) {
-        for (Article article: articles) {
-            new insertArticleTask(rssDao).execute(article);
-        }
+        new insertMultipleArticleTask(rssDao).execute(articles);
     }
 
     public void updateArticle(Article article) {
@@ -146,6 +142,22 @@ public class RssRepository {
         }
     }
 
+    private static class insertMultipleSiteTask extends AsyncTask<List<Site>, Void, Void> {
+        private RssDao rssDao;
+
+        insertMultipleSiteTask(RssDao dao) {
+            rssDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final List<Site>... params) {
+            synchronized (this) {
+                rssDao.insertMultipleSite(params[0]);
+            }
+            return null;
+        }
+    }
+
     private static class insertArticleTask extends AsyncTask<Article, Void, Void> {
         private RssDao rssDao;
 
@@ -157,6 +169,22 @@ public class RssRepository {
         protected Void doInBackground(final Article... params) {
             synchronized (this) {
                 rssDao.insertArticle(params[0]);
+            }
+            return null;
+        }
+    }
+
+    private static class insertMultipleArticleTask extends AsyncTask<List<Article>, Void, Void> {
+        private RssDao rssDao;
+
+        insertMultipleArticleTask(RssDao dao) {
+            rssDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final List<Article>... params) {
+            synchronized (this) {
+                rssDao.insertMultipleArticle(params[0]);
             }
             return null;
         }

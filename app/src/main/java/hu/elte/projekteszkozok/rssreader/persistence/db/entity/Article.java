@@ -99,6 +99,7 @@ public class Article {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
+                ", link='" + link + '\'' +
                 ", pubDate=" + pubDate +
                 ", siteId=" + siteId +
                 '}';
@@ -108,6 +109,7 @@ public class Article {
         return "Article{" +
                 "title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
+                ", link='" + link + '\'' +
                 ", pubDate=" + pubDate +
                 '}';
     }

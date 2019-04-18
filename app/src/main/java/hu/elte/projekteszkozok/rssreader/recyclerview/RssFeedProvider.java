@@ -21,7 +21,7 @@ public class RssFeedProvider {
     private static final String TITLE = "title";
     private static final String ITEM = "item";
 
-    public static List<Article> parse(String rssFeed) {
+    public static List<Article> parse(String rssFeed, int siteId) {
         List<Article> articleList = new ArrayList<>();
         XmlPullParser parser = Xml.newPullParser();
         InputStream stream = null;
@@ -43,6 +43,7 @@ public class RssFeedProvider {
                             article = new Article();
                             article.setId(id);
                             id++;
+                            article.setSiteId(siteId);
                         } else if (article != null) {
                             if (name.equalsIgnoreCase(LINK)) {
                                 article.setLink(parser.nextText());

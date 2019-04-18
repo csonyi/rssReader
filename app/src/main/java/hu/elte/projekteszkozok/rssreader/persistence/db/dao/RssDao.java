@@ -22,6 +22,9 @@ public interface RssDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertSite(Site site);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMultipleSite(List<Site> site);
+
     @Update
     void updateSite(Site site);
 
@@ -41,6 +44,10 @@ public interface RssDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertArticle(Article article);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMultipleArticle(List<Article> article);
+
 
     @Update
     void updateArticle(Article article);

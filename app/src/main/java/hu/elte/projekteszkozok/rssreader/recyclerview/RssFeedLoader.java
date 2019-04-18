@@ -13,6 +13,7 @@ import java.util.List;
 import hu.elte.projekteszkozok.rssreader.R;
 import hu.elte.projekteszkozok.rssreader.persistence.RssRepository;
 import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Article;
+import hu.elte.projekteszkozok.rssreader.persistence.db.entity.Site;
 
 public class RssFeedLoader extends AsyncTask<Void,Void,List<Article>> {
     private String mUrl;
@@ -31,7 +32,14 @@ public class RssFeedLoader extends AsyncTask<Void,Void,List<Article>> {
     @Override
     protected List<Article> doInBackground(Void... voids) {
         if(isConnectedToInternet(mApplication)) {
-            mArticleList = RssFeedProvider.parse(mUrl);
+            Site mSite;
+            if (mRepository.getSiteByUrl(mUrl) != null) {
+                mRepository.insertSite(new Site(mUrl));
+            }
+
+            Log.d("LOGGOLJÁÁÁ MÁÁ", "PLSSSS");
+            mSite = mRepository.getSiteByUrl(mUrl);
+            mArticleList = RssFeedProvider.parse(mUrl, mSite.getId());
             mRepository.deleteAllArticle();
             mRepository.insertMultipleArticle(mArticleList);
         } else {
